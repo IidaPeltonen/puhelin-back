@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
   res.send('<h1>Täällä ei ole mitään nähtävää!</h1>')
 })
 
-/uuden luonti
+//uuden luonti
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
