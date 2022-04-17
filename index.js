@@ -24,8 +24,20 @@ app.get('/', (req, res) => {
 })
 
 //uuden luonti
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
+  Person.find({})
+    .then((result) => {
+      if(person) {
+        result.forEach((person) => {
+          persons.concat(person.name, person.number)
+      })
+    }
+    else {
+      response.status(404).end()
+    }
+  })
+  .catch((error) => next(error));
 
   //jos uudelle hlöllä ei ole annettu nimeä
   if (body.name === '') {
@@ -39,6 +51,17 @@ app.post('/api/persons', (request, response) => {
       error: 'Numero puuttuu'
     })
   }
+
+  const person = new Person({
+    id: body.id,
+    name: body.name,
+    number: body.number
+  })
+
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
+})
 
   /*  
 
@@ -57,31 +80,26 @@ Näitä ei vielä tarvita
     })
   } */
 
-  const person = new Person({
-    id: body.id,
-    name: body.name,
-    number: body.number
-  })
-
-  person.save().then(savedPerson => {
-    response.json(savedPerson)
-  })
-})
-
 //kaikkien luettelo
-app.get('/api/persons', (request, response) => {
-  Person.find({}).then(persons => {
-    response.json(persons)
-  })
+app.get('/api/persons', (request, response, next) => {
+  Person.find({})
+    .then(person => {
+      if (person) {
+        response.json(person)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
 //poisto id:n perusteella
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then((result) => {
+    .then(result => {
       response.status(204).end()
     })
-    .catch((error) => next(error))
+    .catch(error => next(error))
 })
 
 //haku id-numerolla
@@ -97,8 +115,22 @@ app.get('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
+//vanhan päivitys
+app.put("/api/persons/:id", (request, response, next) => {
+  console.log("body", request.body);
+  const body = request.body;
+  Person.findByIdAndUpdate(request.params.id, {
+    name: body.name,
+    number: body.number,
+  })
+    .then((result) => {
+      response.status(204).end()
+    })
+    .catch((error) => next(error))
+})
+
 //info-sivu
-app.get('/info', (request, response) => {
+app.get('/info', (request, response, next) => {
   const today = new Date()
   //ajaksi utc
   const time = today.toUTCString()
@@ -111,7 +143,11 @@ app.get('/info', (request, response) => {
         <p> ${time}</p>`
       )
     }
+    else {
+      response.status(404).end()
+    }
   })
+  .catch((error) => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
