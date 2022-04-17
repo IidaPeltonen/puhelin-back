@@ -1,5 +1,5 @@
 /*  /* Iida Peltonen 2022 */
-// I commented out EVERYTHING, because you already connect to Mongo in /models/person
+// 
 
 
 // const mongoose = require('mongoose')
