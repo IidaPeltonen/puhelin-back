@@ -27,17 +27,16 @@ app.get('/', (req, res) => {
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
   Person.find({})
-    .then((result) => {
-      if(person) {
-        result.forEach((person) => {
+    .then(result => {
+      if (person) {
+        result.forEach(person => {
           persons.concat(person.name, person.number)
-      })
-    }
-    else {
-      response.status(404).end()
-    }
-  })
-  .catch((error) => next(error));
+        })
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 
   //jos uudelle hlöllä ei ole annettu nimeä
   if (body.name === '') {
@@ -62,23 +61,6 @@ app.post('/api/persons', (request, response, next) => {
     response.json(savedPerson)
   })
 })
-
-  /*  
-
-Näitä ei vielä tarvita, ovat myös frontissa
-
-//jos uusi hlö on jo  luettelossa
-  const existingPerson = persons.find(item => {
-    return (
-      item.name.toLowerCase() === body.name.toLowerCase()
-    )
-  }) 
-
-  if (existingPerson) {
-    return response.status(400).json({ 
-      error: 'name must be unique' 
-    })
-  } */
 
 //kaikkien luettelo
 app.get('/api/persons', (request, response, next) => {
@@ -116,17 +98,17 @@ app.get('/api/persons/:id', (request, response, next) => {
 })
 
 //vanhan päivitys
-app.put("/api/persons/:id", (request, response, next) => {
-  console.log("body", request.body);
-  const body = request.body;
+app.put('/api/persons/:id', (request, response, next) => {
+  console.log('body', request.body)
+  const body = request.body
   Person.findByIdAndUpdate(request.params.id, {
     name: body.name,
-    number: body.number,
+    number: body.number
   })
-    .then((result) => {
+    .then(result => {
       response.json(result)
     })
-    .catch((error) => next(error))
+    .catch(error => next(error))
 })
 
 //info-sivu
@@ -135,19 +117,19 @@ app.get('/info', (request, response, next) => {
   //ajaksi utc
   const time = today.toUTCString()
   let maara = 0
-  Person.find({}).then(person => {
-    if (person) {
-      maara = person.length
-      response.send(
-        `<p>Luettelossa on ${maara} henkilön tiedot </p>
+  Person.find({})
+    .then(person => {
+      if (person) {
+        maara = person.length
+        response.send(
+          `<p>Luettelossa on ${maara} henkilön tiedot </p>
         <p> ${time}</p>`
-      )
-    }
-    else {
-      response.status(404).end()
-    }
-  })
-  .catch((error) => next(error))
+        )
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
