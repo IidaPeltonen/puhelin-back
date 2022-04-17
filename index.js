@@ -100,13 +100,12 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 //vanhan päivitys
 app.put('/api/persons/:id', (request, response, next) => {
-  const { name, number } = request.body 
 
-  Person.findByIdAndUpdate(
-    request.params.id, 
-    { name, number },
-    {new: false, runValidators: true, context: 'query' }
-  )
+  const body = request.body
+  Person.findByIdAndUpdate(request.params.id, {
+    name: body.name,
+    number: body.number
+  })
     .then(result => {
       response.json(result)
     })
