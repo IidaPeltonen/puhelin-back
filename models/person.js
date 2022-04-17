@@ -16,8 +16,16 @@ mongoose
   })
 
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String
+  name: {
+    type: String,
+    minlength: 2,
+    required: true
+  },
+   number: {
+     type: String,
+     minlength: 5,
+     required: true
+   }
 })
 
 //tämä muokkaa mongoosen olio-id:n stringiksi

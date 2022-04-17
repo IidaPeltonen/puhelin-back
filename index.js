@@ -60,6 +60,7 @@ app.post('/api/persons', (request, response, next) => {
   person.save().then(savedPerson => {
     response.json(savedPerson)
   })
+  .catch(error => next(error))
 })
 
 //kaikkien luettelo
@@ -99,12 +100,14 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 //vanhan päivitys
 app.put('/api/persons/:id', (request, response, next) => {
-  console.log('body', request.body)
-  const body = request.body
-  Person.findByIdAndUpdate(request.params.id, {
-    name: body.name,
-    number: body.number
-  })
+  const { name, number } = request.body 
+  //const body = request.body
+
+  Person.findByIdAndUpdate(
+    request.params.id, 
+    { name, number },
+    {new: true, runValidators: true, context: 'query' }
+  )
     .then(result => {
       response.json(result)
     })
@@ -143,6 +146,9 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
+  }
+  else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
   }
 
   next(error)
