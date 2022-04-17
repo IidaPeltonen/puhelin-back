@@ -65,7 +65,7 @@ app.post('/api/persons', (request, response, next) => {
 
   /*  
 
-Näitä ei vielä tarvita
+Näitä ei vielä tarvita, ovat myös frontissa
 
 //jos uusi hlö on jo  luettelossa
   const existingPerson = persons.find(item => {
