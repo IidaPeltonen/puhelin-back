@@ -124,7 +124,7 @@ app.put("/api/persons/:id", (request, response, next) => {
     number: body.number,
   })
     .then((result) => {
-      response.status(204).end()
+      response.json(result))
     })
     .catch((error) => next(error))
 })
