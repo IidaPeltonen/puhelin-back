@@ -7,10 +7,10 @@ require('dotenv').config()
 const Person = require('./models/person')
 
 const requestLogger = (request, response, next) => {
-  console.log('Method:', request.method)
+/*   console.log('Method:', request.method)
   console.log('Path:  ', request.path)
   console.log('Body:  ', request.body)
-  console.log('---')
+  console.log('---') */
   next()
 }
 
@@ -28,9 +28,10 @@ app.post('/api/persons', (request, response, next) => {
   const body = request.body
   Person.find({})
     .then(result => {
+      console.log(result)
       if (person) {
         result.forEach(person => {
-          persons.concat(person.name, person.number)
+          person.concat(person.name, person.number)
         })
       } else {
         response.status(404).end()
