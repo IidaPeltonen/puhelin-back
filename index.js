@@ -28,12 +28,15 @@ app.post('/api/persons', (request, response, next) => {
   const body = request.body
   Person.find({})
     .then(result => {
-      console.log(result)
-      if (person) {
-        result.forEach(person => {
-          person.concat(person.name, person.number)
+      const existingPerson = result.some(findPerson => findPerson.name.toLowerCase() === person.name.toLowerCase())
+
+      if (existingPerson) {
+        return response.status(400).json({
+          error: "Henkilö löytyy jo luettelosta"
         })
-      } else {
+      }
+
+      if (!person) {
         response.status(404).end()
       }
     })
