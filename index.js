@@ -98,7 +98,6 @@ app.get('/api/persons/:id', (request, response, next) => {
     })
     .catch(error => next(error))
 })
-///sfctdsyg
 
 //vanhan päivitys
  app.put('/api/persons/:id', (request, response, next) => {
