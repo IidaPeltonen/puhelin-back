@@ -26,6 +26,7 @@ app.get('/', (req, res) => {
 //uuden luonti
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
+  console.log(body)
   Person.find({})
     .then(result => {
       if (person) {
@@ -57,6 +58,7 @@ app.post('/api/persons', (request, response, next) => {
   })
 
   person.save().then(savedPerson => {
+    console.log(savedPerson)
     response.json(savedPerson)
   })
   .catch(error => next(error))
