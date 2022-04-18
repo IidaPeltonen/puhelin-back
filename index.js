@@ -38,7 +38,7 @@ app.post('/api/persons', (request, response, next) => {
     })
     .catch(error => next(error))
 
-  //jos uudelle hlöllä ei ole annettu nimeä
+  //jos uudelle hlöllä ei ole annettu nimeäääääääää
   if (body.name === '') {
     return response.status(400).json({
       error: 'Nimi puuttuu'
