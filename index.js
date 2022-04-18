@@ -87,6 +87,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
 //haku id-numerolla
 app.get('/api/persons/:id', (request, response, next) => {
+  
   Person.findById(request.params.id)
     .then(person => {
       if (person) {
@@ -101,13 +102,11 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 //vanhan päivitys
  app.put('/api/persons/:id', (request, response, next) => {
-  const { name, number } = request.body
-
-  Person.findByIdAndUpdate(
-    request.params.id, 
-    { name, number },
-    { new: true, runValidators: true, context: 'query' }
-  ) 
+  const body = request.body
+  Person.findByIdAndUpdate(request.params.id, {
+    name: body.name,
+    number: body.number
+  })
     .then(result => {
       response.json(result)
     })
