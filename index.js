@@ -99,7 +99,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 })
 
 //vanhan päivitys
-/* app.put('/api/persons/:id', (request, response, next) => {
+ app.put('/api/persons/:id', (request, response, next) => {
   const body = request.body
   Person.findByIdAndUpdate(request.params.id, {
     name: body.name,
@@ -109,8 +109,8 @@ app.get('/api/persons/:id', (request, response, next) => {
       response.json(result)
     })
     .catch(error => next(error))
-}) */
-app.put('/api/persons/:id', (request, response, next) => {
+}) 
+/* app.put('/api/persons/:id', (request, response, next) => {
   const { name, number } = request.body
 
   Person.findByIdAndUpdate(
@@ -122,7 +122,7 @@ app.put('/api/persons/:id', (request, response, next) => {
       response.json(result)
     })
     .catch(error => next(error))
-})
+}) */
 
 //info-sivu
 app.get('/info', (request, response, next) => {
