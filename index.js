@@ -7,7 +7,7 @@ require('dotenv').config()
 const Person = require('./models/person')
 
 const requestLogger = (request, response, next) => {
-/*   console.log('Method:', request.method)
+/*   console.log('Met¢hod:', request.method)
   console.log('Path:  ', request.path)
   console.log('Body:  ', request.body)
   console.log('---') */
@@ -26,19 +26,26 @@ app.get('/', (req, res) => {
 //uuden luonti
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
+  console.log(body)
   Person.find({})
     .then(result => {
-      const existingPerson = result.some(findPerson => findPerson.name.toLowerCase() === person.name.toLowerCase())
 
-      if (existingPerson) {
+      console.log(result)
+      const checkPersons = result.some(findPerson => findPerson.name.toLowerCase() === body.name.toLowerCase())
+
+      if (checkPersons) {
         return response.status(400).json({
-          error: "Henkilö löytyy jo luettelosta"
+          error: 'Nimi on jo luettelossa!'
         })
+      } else {
+        const newPerson = new Person({
+          name: body.name,
+          number: body.number
+        });
+        newPerson.save()
+        return response.json(newPerson)
       }
 
-      if (!person) {
-        response.status(404).end()
-      }
     })
     .catch(error => next(error))
 
@@ -54,17 +61,6 @@ app.post('/api/persons', (request, response, next) => {
       error: 'Numero puuttuu'
     })
   }
-
-  const person = new Person({
-    name: body.name,
-    number: body.number
-  })
-
-  person.save().then(savedPerson => {
-    console.log(savedPerson)
-    response.json(savedPerson)
-  })
-  .catch(error => next(error))
 })
 
 //kaikkien luettelo
