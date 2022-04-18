@@ -97,22 +97,9 @@ app.get('/api/persons/:id', (request, response, next) => {
     })
     .catch(error => next(error))
 })
+///sfctdsyg
 
 //vanhan päivitys
-/*  THIS WORKS, BUT YOPU CAN SAVE WITHOUT NUMBER
-  app.put('/api/persons/:id', (request, response, next) => {
-  const body = request.body
-  Person.findByIdAndUpdate(request.params.id, {
-    name: body.name,
-    number: body.number
-  })
-    .then(result => {
-      response.json(result)
-    })
-    .catch(error => next(error))
-})  */
-
-//THIS ONE DOES NOT ALLOWE TO SAVE WITHOUT CORRECT INFO, BUT GIVES A WRONG ERROR
  app.put('/api/persons/:id', (request, response, next) => {
   const { name, number } = request.body
 
