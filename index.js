@@ -26,12 +26,7 @@ app.get('/', (req, res) => {
 //uuden luonti
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
-/*   if (body.name === undefined) {
-    return response.status(400).json({ error : 'name missing' })
-  }
-  if (body.number === undefined) {
-    return response.status(400).json({ error : 'number missing' })
-  } */
+
   Person.find({})
     .then(result => {
 
@@ -58,19 +53,6 @@ app.post('/api/persons', (request, response, next) => {
     }
   })
   .catch(error => next(error))
-
-/*   //jos uudelle hlöllä ei ole annettu nimeäääääääää
-  if (body.name === '') {
-    return response.status(400).json({
-      error: 'Nimi puuttuu'
-    })
-  }
-  //jos uudelle hlöllä ei ole annettu numeroa
-  if (body.number === '') {
-    return response.status(400).json({
-      error: 'Numero puuttuu'
-    })
-  } */
 })
 
 //kaikkien luettelo
