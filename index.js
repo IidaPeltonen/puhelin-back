@@ -26,30 +26,37 @@ app.get('/', (req, res) => {
 //uuden luonti
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
-  console.log(body)
+/*   if (body.name === undefined) {
+    return response.status(400).json({ error : 'name missing' })
+  }
+  if (body.numebr === undefined) {
+    return response.status(400).json({ error : 'number missing' })
+  } */
   Person.find({})
     .then(result => {
 
-      console.log(result)
-      const checkPersons = result.some(findPerson => findPerson.name.toLowerCase() === body.name.toLowerCase())
+    //tarkistetaan onko nimi jo luettelossa
+    const checkPersons = result.some(findPerson => findPerson.name.toLowerCase() === body.name.toLowerCase())
 
-      if (checkPersons) {
-        return response.status(400).json({
-          error: 'Nimi on jo luettelossa!'
-        })
-      } else {
-        const newPerson = new Person({
-          name: body.name,
-          number: body.number
-        });
-        newPerson.save()
-        return response.json(newPerson)
-      }
+    //jos on
+    if (checkPersons) {
+      return response.status(400).json({
+        error: 'Nimi on jo luettelossa!'
+      })
+    } 
+    //jos ei
+    else {
+      const newPerson = new Person({
+        name: body.name,
+        number: body.number
+      });
+    newPerson.save()
+    return response.json(newPerson)
+    }
+  })
+  .catch(error => next(error))
 
-    })
-    .catch(error => next(error))
-
-  //jos uudelle hlöllä ei ole annettu nimeäääääääää
+/*   //jos uudelle hlöllä ei ole annettu nimeäääääääää
   if (body.name === '') {
     return response.status(400).json({
       error: 'Nimi puuttuu'
@@ -60,7 +67,7 @@ app.post('/api/persons', (request, response, next) => {
     return response.status(400).json({
       error: 'Numero puuttuu'
     })
-  }
+  } */
 })
 
 //kaikkien luettelo
