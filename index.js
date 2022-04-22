@@ -40,10 +40,13 @@ app.post('/api/persons', (request, response, next) => {
 
     //jos on
     if (checkPersons) {
-      return response.status(400).json({
-        error: 'Nimi on jo luettelossa!'
-      })
-    } 
+      let vastaus = window.confirm(
+        `${newPerson} löytyy jo luettelosta, päivitetäänkö numero?`
+      )
+      if (!vastaus) {
+        setNewPerson('')
+        setNewNumber('')
+      } 
     //jos ei
     else {
       const newPerson = new Person({
