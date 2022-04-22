@@ -20,7 +20,7 @@ app.use(cors())
 app.use(express.static('build'))
 
 app.get('/', (req, res) => {
-  res.send('<h1>Täällä ei ole mitään nähtävää!</h1>')
+  res.send('<h1>Moi!</h1>')
 })
 
 //uuden luonti
