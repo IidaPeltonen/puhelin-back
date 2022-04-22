@@ -29,7 +29,7 @@ app.post('/api/persons', (request, response, next) => {
 /*   if (body.name === undefined) {
     return response.status(400).json({ error : 'name missing' })
   }
-  if (body.numebr === undefined) {
+  if (body.number === undefined) {
     return response.status(400).json({ error : 'number missing' })
   } */
   Person.find({})
@@ -107,12 +107,13 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 //vanhan päivitys
 app.put('/api/persons/:id', (request, response, next) => {
+  const { name, number } = request.body
 
-  const body = request.body
-  Person.findByIdAndUpdate(request.params.id, {
-    name: body.name,
-    number: body.number
-  })
+  Person.findByIdAndUpdate(
+    request.params.id, 
+    { name, number },
+    { new: true, runValidators: true, context: 'query' }
+  )
     .then(result => {
       response.json(result)
     })
