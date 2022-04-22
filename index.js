@@ -10,7 +10,7 @@ const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
   console.log('Path:  ', request.path)
   console.log('Body:  ', request.body)
-  console.log('---') 
+  console.log('---')
   next()
 }
 
@@ -29,30 +29,32 @@ app.post('/api/persons', (request, response, next) => {
 
   Person.find({})
     .then(result => {
+      //tarkistetaan onko nimi jo luettelossa
+      const checkPersons = result.some(
+        findPerson => findPerson.name.toLowerCase() === body.name.toLowerCase()
+      )
 
-    //tarkistetaan onko nimi jo luettelossa
-    const checkPersons = result.some(findPerson => findPerson.name.toLowerCase() === body.name.toLowerCase())
-
-    //jos on
-    if (checkPersons) {
-      return response.status(400).json({
-        error: 'Nimi on jo luettelossa!'
-      })
-    } 
-    //jos ei
-    else {
-      const newPerson = new Person({
-        name: body.name,
-        number: body.number
-      });
-    newPerson.save()
-      .then(savedPerson => {
-        response.json(savedPerson)
-      })
-      .catch(error => next(error))
-    }
-  })
-  .catch(error => next(error))
+      //jos on
+      if (checkPersons) {
+        return response.status(400).json({
+          error: 'Nimi on jo luettelossa!'
+        })
+      }
+      //jos ei
+      else {
+        const newPerson = new Person({
+          name: body.name,
+          number: body.number
+        })
+        newPerson
+          .save()
+          .then(savedPerson => {
+            response.json(savedPerson)
+          })
+          .catch(error => next(error))
+      }
+    })
+    .catch(error => next(error))
 })
 
 //kaikkien luettelo
@@ -95,7 +97,7 @@ app.put('/api/persons/:id', (request, response, next) => {
   const { name, number } = request.body
 
   Person.findByIdAndUpdate(
-    request.params.id, 
+    request.params.id,
     { name, number },
     { new: true, runValidators: true, context: 'query' }
   )
@@ -135,10 +137,9 @@ app.use(unknownEndpoint)
 const errorHandler = (error, request, response, next) => {
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  }
-  else if (error.name === 'ValidationError') {
+  } else if (error.name === 'ValidationError') {
     return response.status(400).json({ error: error.message })
-  } 
+  }
   next(error)
 }
 
@@ -149,8 +150,7 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
 
-/* 
-const morgan = require('morgan')
+/* const morgan = require('morgan')
 
 app.use(
   morgan(':method :url :status :res[content-length] - :response-time ms :type')
@@ -160,6 +160,4 @@ morgan.token('type', (request, response) => JSON.stringify(request.body))
 
 morgan.token('param', function (request, response, param) {
   return request.params[param]
-})
-
-*/
+}) */
